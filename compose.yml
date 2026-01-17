@@ -1,0 +1,9 @@
+services:
+  build-atmosphere-nsh:
+    image: devkitpro/devkita64:latest
+    pull_policy: always
+    working_dir: /app
+    volumes:
+      - .:/app
+    user: "1000:1000"
+    command: bash -c "make clean && make"
