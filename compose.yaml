@@ -1,10 +1,56 @@
+x-atmosphere-base: &atmosphere-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: atmosphere-builder:latest
+  working_dir: /app
+  volumes:
+    - .:/app
+    - ${HOME}/.switch:/home/atmosphere/.switch:ro
+    - ${HOME}/.switch:/.switch:ro
+  user: "${UID:-1000}:${GID:-1000}"
+  environment:
+    - MAKEFLAGS=-j${JOBS:-6}
+
 services:
-  build-atmosphere-nsh:
-    image: devkitpro/devkita64:latest
-    pull_policy: always
-    working_dir: /app
-    volumes:
-      - .:/app
-      - ${HOME}/.switch:/.switch
-    user: "1000:1000"
+  # Servicio principal por defecto (equivalente a ejecutar 'make' / target all)
+  build:
+    <<: *atmosphere-base
+    command: make
+
+  # Limpia y vuelve a compilar desde cero
+  rebuild:
+    <<: *atmosphere-base
+    profiles: ["targets"]
     command: bash -c "make clean && make"
+
+  # Targets del Makefile accesibles con: docker compose run --rm <target>
+  release:
+    <<: *atmosphere-base
+    profiles: ["targets"]
+    command: make nx_release
+
+  dist-no-debug:
+    <<: *atmosphere-base
+    profiles: ["targets"]
+    command: make dist-no-debug-nx_release
+
+  debug:
+    <<: *atmosphere-base
+    profiles: ["targets"]
+    command: make nx_debug
+
+  audit:
+    <<: *atmosphere-base
+    profiles: ["targets"]
+    command: make nx_audit
+
+  clean:
+    <<: *atmosphere-base
+    profiles: ["targets"]
+    command: make clean
+
+  clean-all:
+    <<: *atmosphere-base
+    profiles: ["targets"]
+    command: make clean-all
