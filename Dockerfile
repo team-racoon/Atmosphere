@@ -56,19 +56,19 @@ RUN dkp-pacman -S switch-tools hactool --noconfirm && dkp-pacman -Syu --noconfir
 #     rm -rf /tmp/switch-tools
 
 # Install libnx from Git (optional)
-# ENV LIBNX_REV=146c3d1446d35546943c7b6cfcd479bc1f5e9b67
-# RUN cd /tmp && \
-#     mkdir -p /tmp/libnx && \
-#     cd /tmp/libnx && \
-#     git init && \
-#     git remote add origin https://github.com/switchbrew/libnx.git && \
-#     git fetch --depth 1 origin $LIBNX_REV && \
-#     git reset --hard FETCH_HEAD && \
-#     make -j$(nproc) && \
-#     cd nx && \
-#     make install && \
-#     cd /tmp && \
-#     rm -rf /tmp/libnx
+ENV LIBNX_REV=146c3d1446d35546943c7b6cfcd479bc1f5e9b67
+RUN cd /tmp && \
+    mkdir -p /tmp/libnx && \
+    cd /tmp/libnx && \
+    git init && \
+    git remote add origin https://github.com/switchbrew/libnx.git && \
+    git fetch --depth 1 origin $LIBNX_REV && \
+    git reset --hard FETCH_HEAD && \
+    make -j$(nproc) && \
+    cd nx && \
+    make install && \
+    cd /tmp && \
+    rm -rf /tmp/libnx
 
 RUN useradd -m atmosphere && \
     echo "atmosphere ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/atmosphere && \
