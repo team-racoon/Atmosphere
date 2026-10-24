@@ -56,7 +56,7 @@ RUN dkp-pacman -S switch-tools hactool --noconfirm && dkp-pacman -Syu --noconfir
 #     rm -rf /tmp/switch-tools
 
 # Install libnx from Git (optional)
-ENV LIBNX_REV=146c3d1446d35546943c7b6cfcd479bc1f5e9b67
+ENV LIBNX_REV=b156b4774fb2df7b93402169509266da7547fc4c
 RUN cd /tmp && \
     mkdir -p /tmp/libnx && \
     cd /tmp/libnx && \
